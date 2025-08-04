@@ -1,108 +1,118 @@
-Football Forwards Scout Pro
+# Football Forwards Scout Pro
+
 An advanced football scouting dashboard powered by Streamlit, offering interactive analytics, AI-driven recommendations, and comprehensive visualizations to help scouts, analysts, and enthusiasts discover, compare, and evaluate forwards.
 
-🚀 Live Demo
-👉 https://football-forwards-scout-pro-joypynurnw6drb2rdpbu3h.streamlit.app/
+---
 
-📦 Features
-Dashboard Overview
-Displays key metrics (total forwards, leagues, teams, average market value) and quick access cards to all scouting tools.
+## 🚀 Live Demo
 
-Forward Profile
-Deep-dive into individual player statistics with an interactive radar chart, strengths & weaknesses, and performance badges.
+[https://football-forwards-scout-pro-joypynurnw6drb2rdpbu3h.streamlit.app/](https://football-forwards-scout-pro-joypynurnw6drb2rdpbu3h.streamlit.app/)
 
-Player Comparison
-Side-by-side comparison of two players across multiple attributes, including tactical insights and summary tables.
+---
 
-Player Similarity
-Find look-alike forwards using cosine similarity on eight engineered features (Pace, Shooting, Passing, Dribbling, Physical, Aerial, Mental, Overall).
+## 📦 Features
 
-Scouting Metrics
-Advanced scatter plots, distribution analyses, and correlation insights across any two metrics with optional bubble sizing and color coding.
+### 1. Dashboard Overview
+- **Key Metrics**: Total forwards, leagues, teams, average market value  
+- **Quick Access Cards**: Navigate to each scouting tool  
 
-Performance Trends
-League-based trend analysis showing median performance, distributions, and detailed statistics with interactive tabs.
+### 2. Forward Profile
+- Individual player deep dive  
+- Interactive radar chart, strengths & weaknesses  
+- Performance badges and market value display  
 
-3D Exploration
-Three-dimensional scatter plots for custom feature analyses, with modes for performance clustering, league comparison, and market value.
+### 3. Player Comparison
+- Side-by-side comparison of two players  
+- Tactical insights and comparison tables  
 
-Scout Assistant
-AI-powered chat assistant leveraging a RAG system and Llama LLM to answer scouting queries, suggest players, and compare talents.
+### 4. Player Similarity
+- Cosine similarity on eight attributes (Pace, Shooting, Passing, Dribbling, Physical, Aerial, Mental, Overall)  
+- Optional weighting by overall rating  
+- Visual similarity scores and distribution  
 
-📁 Repository Structure
-text
+### 5. Scouting Metrics
+- Custom scatter plots with bubble sizing and color coding  
+- Correlation analysis and distribution histograms  
+
+### 6. Performance Trends
+- League-based trend analysis (median, distribution, detailed stats)  
+- Interactive charts grouped by league  
+
+### 7. 3D Exploration
+- Three-dimensional scatter plots for custom feature analysis  
+- Modes: Performance clustering, league comparison, market value  
+
+### 8. Scout Assistant
+- AI-powered chat assistant using RAG + Llama LLM  
+- Natural-language scouting queries and recommendations  
+
+---
+
+## 📁 Repository Structure
+
 football-forwards-scout-pro/
-│
-├── app.py                                # Main application entry point
-├── requirements.txt                      # Python dependencies
+├── app.py
+├── requirements.txt
 ├── forwards_clean_with_market_values_updated.csv
-├── setup_vectordb.py                     # Backend vector DB setup
-├── backend/                              # RAG system and embeddings
-│   ├── main.py
-│   └── rag_system.py
-└── pages/                                # Streamlit page modules
-    ├── comparison.py
-    ├── exploration_3d.py
-    ├── forward_profile.py
-    ├── performance_trends.py
-    ├── scout_assistant.py
-    ├── scouting_metrics.py
-    └── similarity.py
-🛠️ Installation & Setup
-Clone the repository
+├── setup_vectordb.py
+├── backend/
+│ ├── main.py
+│ └── rag_system.py
+└── pages/
+├── compariso
+.py ├── explorati
+n_3d.py ├── forwar
+_profile.py ├── perfo
+mance_trends.py ├─
+scout_assistant.py
 
-bash
+---
+
+## 🛠️ Installation & Setup
+
+1. **Clone the repository**
 git clone https://github.com/Mahdibenj22/football-forwards-scout-pro.git
 cd football-forwards-scout-pro
-Create a virtual environment (optional but recommended)
-
-bash
+2. **Create a virtual environment** (recommended)
 python -m venv venv
-source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
-Install dependencies
-
-bash
+source venv/bin/activate # macOS/Linux
+venv\Scripts\activate # Windows
+3. **Install dependencies**
 pip install -r requirements.txt
-Prepare vector database (for Scout Assistant)
-
-bash
+4. **(Optional) Prepare vector database**
 python setup_vectordb.py
-Ensure chromadb and Ollama are running for full AI features.
 
-🎯 Running Locally
-bash
-streamlit run app.py
-The app will open at http://localhost:8501.
+---
 
-☁️ Deployment to Streamlit Cloud
-Push your code to a public GitHub repo.
+## 🎯 Running Locally
 
-Sign up at share.streamlit.io and connect your GitHub account.
 
-Click New app → select your repo, branch main, and app.py as the entrypoint.
+Open your browser at `http://localhost:8501`.
 
-Click Deploy. Your app will be live in a few minutes!
+---
 
-🔧 Usage Tips
-Collapsible Sidebar: Click the “☰” icon top-left to expand/collapse navigation.
+## ☁️ Deploy to Streamlit Cloud
 
-Feature Cards: Click any card on the dashboard for quick access.
+1. Push code to a **public** GitHub repo.  
+2. Sign in at [share.streamlit.io](https://share.streamlit.io/).  
+3. Click **New app**, select your repo, branch `main`, and entry `app.py`.  
+4. Click **Deploy**—your app will be live in minutes!
 
-AI Chat: Use Scout Assistant for natural-language scouting queries (requires RAG backend).
+---
 
-Similarity Thresholds: Scores >0.8 indicate very similar playing styles.
+## 🤝 Contributing
 
-🤝 Contributing
-Fork the repository
+1. Fork this repo  
+2. Create a branch: `git checkout -b feature/my-feature`  
+3. Commit: `git commit -m "Add new feature"`  
+4. Push: `git push origin feature/my-feature`  
+5. Open a Pull Request  
 
-Create a feature branch (git checkout -b feature/my-feature)
+---
 
-Commit your changes (git commit -m 'Add awesome feature')
+## 📄 License
 
-Push to the branch (git push origin feature/my-feature)
+This project is licensed under the MIT License. 
 
-Open a Pull Request
 
-📄 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+
