@@ -4,10 +4,16 @@ An advanced football scouting dashboard powered by Streamlit, offering interacti
 
 ---
 
-## 🚀 Live Demo
+## 🚀 Live Demos
 
-[https://football-forwards-scout-pro-joypynurnw6drb2rdpbu3h.streamlit.app/](https://football-forwards-scout-pro-joypynurnw6drb2rdpbu3h.streamlit.app/)
+- **Local Development:**  
+  `streamlit run app.py`
 
+- **Streamlit Cloud Deployment:**  
+  https://football-forwards-scout-pro-joypynurnw6drb2rdpbu3h.streamlit.app/  
+  https://football-forwards-scout-pro-rebwvhkjy3ptwque2mbgve.streamlit.app/  
+
+> **Note:** The **Scout Assistant** page (AI chat) is only available in local development with Ollama & vector database setup. It won’t function on the cloud deployments.
 ---
 
 ## 📦 Features
@@ -44,7 +50,8 @@ An advanced football scouting dashboard powered by Streamlit, offering interacti
 
 ### 8. Scout Assistant
 - AI-powered chat assistant using RAG + Llama LLM  
-- Natural-language scouting queries and recommendations  
+- Natural-language scouting queries and recommendations
+- **Only available locally** (requires Ollama server & vector database)
 
 ---
 
