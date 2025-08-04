@@ -17,7 +17,6 @@ try:
     RAG_AVAILABLE = True
 except ImportError:
     RAG_AVAILABLE = False
-    st.error("RAG system not available. Please check backend/rag_system.py")
 
 @st.cache_data
 def load_data():
@@ -27,14 +26,20 @@ def load_data():
         st.error("Data file not found.")
         return pd.DataFrame()
 
-# Initialize RAG system
+# Initialize RAG system with cloud-safe fallback
 @st.cache_resource
 def initialize_rag_system():
-    """Initialize the RAG system once and cache it"""
+    """Initialize the RAG system once and cache it - cloud deployment safe"""
     if not RAG_AVAILABLE:
         return None
     
     try:
+        # Quick check for Ollama availability (local development only)
+        import requests
+        response = requests.get("http://localhost:11434/api/tags", timeout=3)
+        if response.status_code != 200:
+            return None
+            
         rag = FootballRAGSystem()
         # Run the async initialization in a sync context
         loop = asyncio.new_event_loop()
@@ -43,7 +48,7 @@ def initialize_rag_system():
         loop.close()
         return rag
     except Exception as e:
-        st.error(f"Failed to initialize RAG system: {e}")
+        # Graceful fallback - don't show error in cloud deployment
         return None
 
 async def get_rag_response(rag_system, query):
@@ -97,18 +102,16 @@ def generate_fallback_response(query, df):
                             response += "\n"
                         return response
     
-    # Default helpful response
-    return """🤖 **RAG System Unavailable - Using Basic Mode**
+    # Default helpful response for cloud deployment
+    return """🤖 **Cloud Deployment - Basic Mode Active**
 
-I can still help with basic queries! Try asking:
+I can help with basic queries! Try asking:
 • "Most valuable forwards"
 • "Who is the fastest player in Premier League?"
 • "Best overall players"
+• "Top young prospects"
 
-For advanced analysis with natural language processing, please:
-1. Start Ollama service
-2. Set up the vector database
-3. Ensure backend/rag_system.py is accessible
+**Note:** Advanced AI features (RAG + LLM) are only available in local development environment with Ollama and vector database setup.
 """
 
 def main():
@@ -116,6 +119,23 @@ def main():
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    /* Hide Streamlit's built-in pages menu completely */
+    .css-k1vhr4, .css-zt5igj, .css-1lcbmhc > div:first-child,
+    section[data-testid="stSidebar"] > div:first-child > div:first-child,
+    .css-1lcbmhc .css-1outpf7 > div:first-child,
+    div[data-testid="stSidebarNav"], 
+    div[data-testid="stSidebarNavItems"],
+    .css-1544g2n > div:first-child,
+    .css-17lntkn, .css-pkbazv,
+    [data-testid="stSidebarNav"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     
     :root {
         --primary: #00c6ff;
@@ -352,12 +372,16 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Initialize RAG system
+    # Initialize RAG system with cloud-safe fallback
     rag_system = initialize_rag_system()
     
-    # Page Header with RAG status
-    rag_status_text = "🦙 RAG + LLM Enabled" if rag_system else "⚠️ Basic Mode"
-    rag_status_class = "rag-enabled" if rag_system else "rag-disabled"
+    # Page Header with RAG status - cloud deployment aware
+    if rag_system:
+        rag_status_text = "🦙 RAG + LLM Enabled"
+        rag_status_class = "rag-enabled"
+    else:
+        rag_status_text = "☁️ Cloud Mode"
+        rag_status_class = "rag-disabled"
     
     st.markdown(f'''
     <div class="page-header">
@@ -369,17 +393,17 @@ def main():
     
     df = load_data()
     
-    # Initialize chat history
+    # Initialize chat history with cloud-aware welcome message
     if 'messages' not in st.session_state:
         st.session_state.messages = []
         if rag_system:
             welcome_msg = "👋 **Hello! I'm your AI football scout powered by Llama LLM.**\n\nI can provide detailed analysis about forwards using natural language. Ask me anything like:\n• \"Who is the fastest player in Premier League?\"\n• \"Compare Mbappe vs Haaland\"\n• \"Find young French talents under €20M\""
         else:
-            welcome_msg = "👋 **Hello! I'm running in basic mode.**\n\nRAG system is not available. I can still help with simple queries about forwards in the database."
+            welcome_msg = "👋 **Hello! I'm running in cloud deployment mode.**\n\n☁️ Advanced AI features are available in local development. I can still help with basic scouting queries about forwards in our database!"
         st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
     
-    # Enhanced Chat Interface
-    status_text = "RAG + LLM Ready" if rag_system else "Basic Mode Active"
+    # Enhanced Chat Interface with cloud-aware status
+    status_text = "RAG + LLM Ready" if rag_system else "Cloud Mode Active"
     
     st.markdown(f'''
     <div class="chat-container">
@@ -441,7 +465,7 @@ def main():
                 # Add user message
                 st.session_state.messages.append({"role": "user", "content": suggestion})
                 
-                # Generate response
+                # Generate response with cloud-safe handling
                 if rag_system:
                     # Show typing indicator
                     typing_placeholder = st.empty()
@@ -549,7 +573,7 @@ def main():
                 </div>
                 ''', unsafe_allow_html=True)
     
-    # System Status and Controls
+    # System Status and Controls - cloud deployment aware
     st.markdown("### 🔧 System Status")
     
     col1, col2 = st.columns(2)
@@ -558,7 +582,7 @@ def main():
         if rag_system:
             st.success("✅ **RAG System Active**\n- 🦙 Llama LLM connected\n- 📚 Vector database loaded\n- 🤖 Advanced analysis available")
         else:
-            st.warning("⚠️ **Basic Mode Active**\n- RAG system unavailable\n- Limited query processing\n- Start Ollama & setup vector DB for full features")
+            st.info("☁️ **Cloud Deployment Mode**\n- Basic scouting queries available\n- Advanced AI features require local setup\n- Full functionality in development environment")
     
     with col2:
         if st.button("🗑️ Clear Chat", use_container_width=True):
@@ -566,7 +590,7 @@ def main():
             if rag_system:
                 welcome_msg = "👋 **Hello! I'm your AI football scout powered by Llama LLM.**\n\nI can provide detailed analysis about forwards using natural language. Ask me anything!"
             else:
-                welcome_msg = "👋 **Hello! I'm running in basic mode.**\n\nRAG system is not available. I can still help with simple queries about forwards in the database."
+                welcome_msg = "👋 **Hello! I'm running in cloud deployment mode.**\n\n☁️ Advanced AI features are available in local development. I can still help with basic scouting queries!"
             st.session_state.messages.append({"role": "assistant", "content": welcome_msg})
             st.rerun()
     
